@@ -1,6 +1,5 @@
 import 'package:codedecoders/homePage.dart';
 import 'package:flutter/material.dart';
-import 'package:line_awesome_icons/line_awesome_icons.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -122,11 +121,8 @@ class _LoginState extends State<Login> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
-                    Icon(LineAwesomeIcons.facebook_official,
-                    color: Color(0xff00b4ff),
-                    size: 40,),
                     Text(
-                    "Connect with Facebook",
+                    "Register!!",
                     style: TextStyle(
                       color: Color(0xff00b4ff),
                       fontFamily: "CentraleSansRegular",
