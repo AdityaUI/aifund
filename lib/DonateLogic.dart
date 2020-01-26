@@ -33,4 +33,25 @@ class DonateLogic {
   }
 
 
+  void addFunds(String secret) async {
+    KeyPair kp = KeyPair.random();
+    var url = "https://friendbot.stellar.org/?addr=${kp.accountId}";
+    await http.get(url);
+
+    Network.useTestNetwork();
+    Server server = new Server("https://horizon-testnet.stellar.org");
+
+    server.accounts.account(kp).then((account) {
+      Transaction transaction = new TransactionBuilder(account)
+          .addOperation(new PaymentOperationBuilder(
+          KeyPair.fromSecretSeed(secret), new AssetTypeNative(), "1000")
+          .build())
+          .addMemo(Memo.text("Test Transaction"))
+          .build();
+      transaction.sign(kp);
+      server.submitTransaction(transaction);
+    });
+
+  }
+
 }

@@ -129,12 +129,12 @@ class Explore extends StatelessWidget {
                   ListTile(
                     trailing: Icon(Icons.more_vert),
                     leading: Image.asset("assets/ad1.png"),
-                    title: Text("Feeding America Society",
+                    title: Text("Heart Diseases",
                         style: TextStyle(
                             fontFamily: "CentraleSansRegular",
                             fontSize: 18,
                             fontWeight: FontWeight.bold)),
-                    subtitle: Text("Oregon",
+                    subtitle: Text("the leading cause of death for both men and women each year, heart disease claims the most lives nationally and internationally.",
                         style: TextStyle(
                           fontFamily: "CentraleSansRegular",
                           fontSize: 15,
@@ -143,12 +143,12 @@ class Explore extends StatelessWidget {
                   ListTile(
                     trailing: Icon(Icons.more_vert),
                     leading: Image.asset("assets/ad2.png"),
-                    title: Text("Ubuntu",
+                    title: Text("Sickle Cell Anemia",
                         style: TextStyle(
                             fontFamily: "CentraleSansRegular",
                             fontSize: 18,
                             fontWeight: FontWeight.bold)),
-                    subtitle: Text("Maryland",
+                    subtitle: Text("an inherited blood disorder affecting more than 200,000 Americans, causes a lifetime of pain for the afflicted patient.",
                         style: TextStyle(
                           fontFamily: "CentraleSansRegular",
                           fontSize: 15,
@@ -157,12 +157,40 @@ class Explore extends StatelessWidget {
                   ListTile(
                     trailing: Icon(Icons.more_vert),
                     leading: Image.asset("assets/ad3.png"),
-                    title: Text("Dallas Morning News",
+                    title: Text("Parkinson’s",
                         style: TextStyle(
                             fontFamily: "CentraleSansRegular",
                             fontSize: 18,
                             fontWeight: FontWeight.bold)),
-                    subtitle: Text("Washington",
+                    subtitle: Text("How does it feel to experience constant shaking with slow limb movement and impaired posture?",
+                        style: TextStyle(
+                          fontFamily: "CentraleSansRegular",
+                          fontSize: 15,
+                        )),
+                  ),
+                  ListTile(
+                    trailing: Icon(Icons.more_vert),
+                    leading: Image.asset("assets/ad3.png"),
+                    title: Text("Diabetes",
+                        style: TextStyle(
+                            fontFamily: "CentraleSansRegular",
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold)),
+                    subtitle: Text("29.1 million people in the United States have diabetes, but 8.1 million may be undiagnosed and unaware of their condition.",
+                        style: TextStyle(
+                          fontFamily: "CentraleSansRegular",
+                          fontSize: 15,
+                        )),
+                  ),
+                  ListTile(
+                    trailing: Icon(Icons.more_vert),
+                    leading: Image.asset("assets/ad3.png"),
+                    title: Text("ALS",
+                        style: TextStyle(
+                            fontFamily: "CentraleSansRegular",
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold)),
+                    subtitle: Text("Imagine experiencing weakening muscles and slower cognitive functioning to the extent where you are completely paralyzed. ",
                         style: TextStyle(
                           fontFamily: "CentraleSansRegular",
                           fontSize: 15,

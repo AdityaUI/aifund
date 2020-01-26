@@ -58,7 +58,8 @@ class _HeartState extends State<Heart> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       key: new GlobalKey(),
-      child: Stack(
+      child: Column(children:[
+        Stack(
         children: <Widget>[
           Image(
             alignment: Alignment.topCenter,
@@ -86,48 +87,13 @@ class _HeartState extends State<Heart> {
                         fontWeight: FontWeight.w100)),
               ],
             ),
-          ),
-          Positioned(
-            top: 350,
-            width: MediaQuery.of(context).size.width,
-            child: Column(
+          ),],),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 material.Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
-                    FutureBuilder(
-                      future: (loginStellar()),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.done &&
-                            !snapshot.hasError) {
-                          print(snapshot.data);
-                          return Column(
-                            children: <Widget>[
-                              Text(
-                                snapshot.data.balances[0].balance + " XLM",
-                                style: TextStyle(
-                                    color: Color(0xff3cabff),
-                                    fontSize: 20,
-                                    fontFamily: 'CentraleSansRegular',
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              Text(
-                                "My Balance",
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 20,
-                                  fontFamily: 'CentraleSansRegular',
-                                ),
-                              ),
-                            ],
-                          );
-                        }
-                        else {
-                          return CircularProgressIndicator();
-                        }
-
-                      },
-                    ),
 //                    Column(
 //                      children: <Widget>[
 //                        Text(
@@ -179,6 +145,41 @@ class _HeartState extends State<Heart> {
                     ],
                   ),
                 ),
+                FutureBuilder(
+                  future: (loginStellar()),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done &&
+                        !snapshot.hasError) {
+                      print(snapshot.data);
+                      return Column(
+                        children: <Widget>[
+                          SizedBox(height: 20,),
+                          Text(
+                            snapshot.data.balances[0].balance + " XLM",
+                            style: TextStyle(
+                                color: Color(0xff3cabff),
+                                fontSize: 20,
+                                fontFamily: 'CentraleSansRegular',
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            "My Balance",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 20,
+                              fontFamily: 'CentraleSansRegular',
+                            ),
+                          ),
+                        ],
+                      );
+                    }
+                    else {
+                      return CircularProgressIndicator();
+                    }
+
+                  },
+                ),
+                SizedBox(height: 20,),
                 FlatButton(
                   child: Text("Donate"),
                   onPressed: () {
@@ -186,6 +187,7 @@ class _HeartState extends State<Heart> {
                       logic.sendFunds("SA6Q3BN75KH67LNXIUJWERKDNHRYJQ6UWTSIMRHIMU5VRAADBOVNCYMN", "GAZAHISP7VFYSWUKWLUCGMYLWW4VLAPJXP6IVMQYJ235UOXFPSIMJERU");
                   },
                 ),
+                SizedBox(height: 20,),
                 FlatButton(
                   child: Text("Add Funds"),
                   onPressed: () {
@@ -194,10 +196,7 @@ class _HeartState extends State<Heart> {
                   },
                 ),
               ],
-            ),
-          )
-        ],
-      ),
+            ),],),
     );
   }
 
