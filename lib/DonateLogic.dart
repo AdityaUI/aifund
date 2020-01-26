@@ -15,6 +15,7 @@ class DonateLogic {
     Server server = new Server("https://horizon-testnet.stellar.org");
 
 
+
     print('here2');
     KeyPair myKp = KeyPair.fromSecretSeed(secret);
     KeyPair toKp = KeyPair.fromAccountId(to);
@@ -23,7 +24,7 @@ class DonateLogic {
     print(amt);
     Transaction transaction = new TransactionBuilder(myAccount)
         .addOperation(new PaymentOperationBuilder(
-        toKp, new AssetTypeNative(), amt)
+        toKp, new AssetTypeNative(), (double.parse(amt) * 1000).toString())
         .build())
         .addMemo(Memo.text("Test Transaction"))
         .build();

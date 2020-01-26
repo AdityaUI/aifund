@@ -18,7 +18,7 @@ class HomePage extends StatefulWidget {
 
 Future<double> fetchAPIResult(int age, int terminality, int income, int funds, int success, int cost) async {
 
-  var uri =  new Uri.https("climatechangecentral.appspot.com", "get_ranks/",{"age":age.toString(),"terminality": terminality.toString(), "income": income.toString(), "funds": funds.toString(), "success": success.toString(), "cost": cost.toString() });
+  var uri =  new Uri.https("climatechangecentral.appspot.com", "get_ranks",{"age":age.toString(),"terminality": terminality.toString(), "income": income.toString(), "funds": funds.toString(), "success": success.toString(), "cost": cost.toString() });
   var response = await http.get(
     uri,
   );
@@ -29,6 +29,7 @@ Future<double> fetchAPIResult(int age, int terminality, int income, int funds, i
 }
 
 class APIResult {
+
   final double result;
 
   APIResult({this.result});
@@ -64,7 +65,8 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     // TODO: implement initState
-    fetchAPIResult(10, 10, 10, 10, 10, 10);
+    //fetchAPIResult(10, 10, 10, 10, 10, 10);
+    print("UID HOME: " + widget.uid.toString());
     super.initState();
   }
 
@@ -96,7 +98,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      body: _currentIndex == 0 ? Heart() : _currentIndex == 1 ? Explore() : SubmissionPage(uid: widget.uid)
+      body: _currentIndex == 0 ? Heart(uid: widget.uid) : _currentIndex == 1 ? Explore(uid: widget.uid) : SubmissionPage(uid: widget.uid)
 
     );
   }

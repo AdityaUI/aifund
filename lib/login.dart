@@ -158,6 +158,8 @@ class _LoginState extends State<Login> {
                     ],
                   ),
                   onPressed: () {
+                    emailInputController.clear();
+                    pwdInputController.clear();
                     Navigator.push(
                         context,
                         MaterialPageRoute(

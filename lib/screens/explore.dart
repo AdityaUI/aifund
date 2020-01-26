@@ -5,12 +5,15 @@ import 'package:flutter/material.dart' as material;
 import 'package:line_awesome_icons/line_awesome_icons.dart';
 import 'package:stellar/stellar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart' as firebase;
+import 'package:codedecoders/homePage.dart';
+import 'dart:async';
+import 'package:codedecoders/person.dart';
 
 class Explore extends StatefulWidget {
-  Explore({Key key, this.title}) : super(key: key);
+  Explore({Key key, this.uid}) : super(key: key);
 
-  final String title;
+  final String uid;
 
   @override
   _ExploreState createState() => _ExploreState();
@@ -23,10 +26,10 @@ class _ExploreState extends State<Explore> {
   @override
   void initState() {
     super.initState();
-    FirebaseAuth.instance.currentUser().then((value) {
-      Firestore.instance
+    checkPayment();
+      firebase.Firestore.instance
           .collection("users")
-          .document(value.uid)
+          .document(widget.uid)
           .get()
           .then((given) {
         setState(() {
@@ -39,13 +42,12 @@ class _ExploreState extends State<Explore> {
           });
         });
       });
-    });
   }
 
   Future<AccountResponse> loginStellar() async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
-    DocumentSnapshot firestore =
-        await Firestore.instance.collection("users").document(user.uid).get();
+    firebase.DocumentSnapshot firestore =
+        await firebase.Firestore.instance.collection("users").document(user.uid).get();
     userPair = KeyPair.fromAccountId(firestore.data["Public Key"].toString());
     myAccount = await Server("https://horizon-testnet.stellar.org")
         .accounts
@@ -54,22 +56,72 @@ class _ExploreState extends State<Explore> {
   }
 
   void checkPayment() async {
-    DonateAccounts accounts = new DonateAccounts();
-    Network.useTestNetwork();
-    Server server = Server("https://horizon-testnet.stellar.org");
-    for (int i = 0; i < accounts.AccountIds.length; i++) {
-      print("i: " + i.toString());
-      KeyPair pair = KeyPair.fromAccountId(accounts.AccountIds[i]);
-      server.accounts.account(pair).then((account) {
-        if (double.parse(account.balances[0].balance) > 1000) {
+    print("payment1");
+    List<person> allPeople = [
+      person(score: -1),
+      person(score: -1),
+      person(score: -1),
+      person(score: -1),
+      person(score: -1),
+      person(score: -1),
+      person(score: -1),
+      person(score: -1),
+    ];
 
-        }
-      });
+    firebase.QuerySnapshot list =
+        await firebase.Firestore.instance.collection("applications").getDocuments();
+    for (int i = 0; i < list.documents.length; i++) {
+      int index =
+          DonateAccounts().causes.indexOf(list.documents[i].data["cause"]);
+      print(list.documents[i].data["age"]);
+          print(list.documents[i].data["terminality"]);
+          print(list.documents[i].data["income"]);
+          print(list.documents[i].data["funds"]);
+          print(list.documents[i].data["success chance"]);
+          print(list.documents[i].data["cost"]);
+      double score = await fetchAPIResult(
+          list.documents[i].data["age"].round(),
+          list.documents[i].data["terminality"].round(),
+          list.documents[i].data["income"].round(),
+          list.documents[i].data["funds"].round(),
+          list.documents[i].data["success chance"].round(),
+          list.documents[i].data["cost"].round());
+      print("payment3");
+      if (allPeople[index].score < score) {
+        int cost = (list.documents[i].data["cost"] - list.documents[i].data["funds"]).round();
+        allPeople[index] = new person(score: score, need: cost, uid: list.documents[i].documentID);
+      }
+    }
+      DonateAccounts accounts = new DonateAccounts();
+      Network.useTestNetwork();
+      Server server = Server("https://horizon-testnet.stellar.org");
+      for (int i = 0; i < accounts.AccountIds.length; i++) {
+        print("i: " + i.toString());
+        KeyPair pair = KeyPair.fromSecretSeed(accounts.SecretSeeds[i]);
+        AccountResponse getAccount = await server.accounts.account(pair);
+        if (allPeople[i].score != -1 && allPeople[i].need < double.parse(getAccount.balances[0].balance)) {
+          print(allPeople[i].uid.toString());
+          KeyPair destination = KeyPair.fromAccountId(allPeople[i].uid.toString());
+          Transaction transaction = new TransactionBuilder(getAccount)
+              .addOperation(new PaymentOperationBuilder(
+              destination, new AssetTypeNative(), allPeople[i].need.toString())
+              .build())
+              .addMemo(Memo.text("Test Transaction"))
+              .build();
+          transaction.sign(pair);
+          server.submitTransaction(transaction).then((response) {
+            print("Success!");
+            print(response);
+          }).catchError((error) {
+            print("Something went wrong!");
+          });
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    print("explore uid: " + widget.uid.toString());
     return SingleChildScrollView(
         child: FutureBuilder(
       future: (loginStellar()),
@@ -150,12 +202,13 @@ class _ExploreState extends State<Explore> {
                           MaterialPageRoute(
                               builder: (context) => DonationPage(
                                     cause: "Cancer",
-                                    description: "As the second most common cause of death in the United States, "
+                                    description:
+                                        "As the second most common cause of death in the United States, "
                                         "cancer devastates the lives of patients and their families each "
                                         "and every year. There are a myriad of cancers and each one is as deadly "
                                         "as the next. Help us fund treatment for a person desperately in need by donating today.",
-                                userPair: userPair,
-                                myAccount: myAccount,
+                                    userPair: userPair,
+                                    myAccount: myAccount,
                                   )),
                         );
                       },
@@ -170,13 +223,14 @@ class _ExploreState extends State<Explore> {
                           MaterialPageRoute(
                               builder: (context) => DonationPage(
                                     cause: "Dementia",
-                                    description: "Imagine slowly forgetting everything you know and everyone you love. "
+                                    description:
+                                        "Imagine slowly forgetting everything you know and everyone you love. "
                                         "The memories you spent your For patients suffering from dementia, "
                                         "this is the tragic reality in which they are forced to live. An entire lifetime "
                                         "spent making memories is rendered useless and eventually, the patient loses all sense of identity. "
                                         "Donate today to give much needed aid to someone suffering from dementia. ",
-                                userPair: userPair,
-                                myAccount: myAccount,
+                                    userPair: userPair,
+                                    myAccount: myAccount,
                                   )),
                         );
                       },
@@ -227,17 +281,18 @@ class _ExploreState extends State<Explore> {
                             onTap: () {
                               Navigator.push(
                                 context,
-                                  MaterialPageRoute(
+                                MaterialPageRoute(
                                     builder: (context) => DonationPage(
                                           cause: "Heart Disease",
-                                          description: "As the leading cause of death for both men and women each year,"
-        "heart disease claims the most lives nationally and internationally."
-        "The most common cause of heart disease, atherosclerosis, "
-        "is a result of an unhealthy diet and a sedentary lifestyle. "
-        "Consider donating today to help us continue treating heart disease patients in "
-        "dire need of your assistance.",
-                                      userPair: userPair,
-                                      myAccount: myAccount,
+                                          description:
+                                              "As the leading cause of death for both men and women each year,"
+                                              "heart disease claims the most lives nationally and internationally."
+                                              "The most common cause of heart disease, atherosclerosis, "
+                                              "is a result of an unhealthy diet and a sedentary lifestyle. "
+                                              "Consider donating today to help us continue treating heart disease patients in "
+                                              "dire need of your assistance.",
+                                          userPair: userPair,
+                                          myAccount: myAccount,
                                         )),
                               );
                             },
@@ -262,13 +317,14 @@ class _ExploreState extends State<Explore> {
                                 MaterialPageRoute(
                                     builder: (context) => DonationPage(
                                           cause: "Sickle Cell Anemia",
-                                          description: "Sickle cell anemia, an inherited blood disorder affecting more than 200,000 "
+                                          description:
+                                              "Sickle cell anemia, an inherited blood disorder affecting more than 200,000 "
                                               "Americans, causes a lifetime of pain for the afflicted patient. "
                                               "Red blood cells within the patient’s body become a sickly sickle shape "
                                               "as a result of the disease, resulting in oxygen deprivation and severe blood flow "
                                               "reduction. Please consider donating to help someone affected by sickle cell anemia.",
-                                      userPair: userPair,
-                                      myAccount: myAccount,
+                                          userPair: userPair,
+                                          myAccount: myAccount,
                                         )),
                               );
                             },
@@ -293,14 +349,15 @@ class _ExploreState extends State<Explore> {
                                 MaterialPageRoute(
                                     builder: (context) => DonationPage(
                                           cause: "Parkinson’s",
-                                          description: "How does it feel to experience constant shaking with slow"
-        "limb movement and impaired posture? A Parkinson’s disease patient"
-        "aces the daily challenges of coping with limited cognitive and movement abilities, "
-        "such as depression, deprived thinking speed, and irrational sleep patterns. "
-        "With your dedication, we can aid donation in order to initiate therapies and "
-        "medications for Parkinson’s patients, possibly limiting the symptoms.",
-                                      userPair: userPair,
-                                      myAccount: myAccount,
+                                          description:
+                                              "How does it feel to experience constant shaking with slow"
+                                              "limb movement and impaired posture? A Parkinson’s disease patient"
+                                              "aces the daily challenges of coping with limited cognitive and movement abilities, "
+                                              "such as depression, deprived thinking speed, and irrational sleep patterns. "
+                                              "With your dedication, we can aid donation in order to initiate therapies and "
+                                              "medications for Parkinson’s patients, possibly limiting the symptoms.",
+                                          userPair: userPair,
+                                          myAccount: myAccount,
                                         )),
                               );
                             },
@@ -313,8 +370,7 @@ class _ExploreState extends State<Explore> {
                                     fontFamily: "CentraleSansRegular",
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold)),
-                            subtitle: Text(
-                                "A disease with no cure.",
+                            subtitle: Text("A disease with no cure.",
                                 style: TextStyle(
                                   fontFamily: "CentraleSansRegular",
                                   fontSize: 15,
@@ -325,17 +381,18 @@ class _ExploreState extends State<Explore> {
                                 MaterialPageRoute(
                                     builder: (context) => DonationPage(
                                           cause: "HIV",
-                                          description: "Imagine you are diagnosed with a disease whose cure is non-existent "
-        "only with a substitute that offers temporary treatment. HIV (Human Immunodeficiency Virus) "
-        "is a virus that destroys the body’s white blood cells, which, in turn, weakens the"
-        " human’s immune system’s ability to obliterate various diseases. As of today, the "
-        "only solution is to seek immediate treatment and take proper medication in order to "
-        "deteriorate the virus’s continuous rate of spreading. With nothing to start from, this"
-        "doesn’t inhibit the idea of funding money towards a successful research "
-        "that would make HIV extinct. With your dedication and donation, together,"
-        " we can facilitate the research to make HIV extinct, a pathway to support the life of a patient. ",
-                                      userPair: userPair,
-                                      myAccount: myAccount,
+                                          description:
+                                              "Imagine you are diagnosed with a disease whose cure is non-existent "
+                                              "only with a substitute that offers temporary treatment. HIV (Human Immunodeficiency Virus) "
+                                              "is a virus that destroys the body’s white blood cells, which, in turn, weakens the"
+                                              " human’s immune system’s ability to obliterate various diseases. As of today, the "
+                                              "only solution is to seek immediate treatment and take proper medication in order to "
+                                              "deteriorate the virus’s continuous rate of spreading. With nothing to start from, this"
+                                              "doesn’t inhibit the idea of funding money towards a successful research "
+                                              "that would make HIV extinct. With your dedication and donation, together,"
+                                              " we can facilitate the research to make HIV extinct, a pathway to support the life of a patient. ",
+                                          userPair: userPair,
+                                          myAccount: myAccount,
                                         )),
                               );
                             },
@@ -360,14 +417,15 @@ class _ExploreState extends State<Explore> {
                                 MaterialPageRoute(
                                     builder: (context) => DonationPage(
                                           cause: "ALS (Lou Gehrig’s)",
-                                          description: "Imagine experiencing weakening muscles and slower cognitive functioning to"
-                                    "the extent where you are completely paralyzed. ALS (Lou Gehrig’s disease)"
-                                    "degenerates the amount of motor neurons in the central nervous system as "
-                                    "well as obliterating muscle functions for various organs(breathing difficulties, "
-                                    "impaired balance, etc.) Continue donating money in order to initiate ideas for"
-                                      "assisting ALS patients. ",
-                                      userPair: userPair,
-                                      myAccount: myAccount,
+                                          description:
+                                              "Imagine experiencing weakening muscles and slower cognitive functioning to"
+                                              "the extent where you are completely paralyzed. ALS (Lou Gehrig’s disease)"
+                                              "degenerates the amount of motor neurons in the central nervous system as "
+                                              "well as obliterating muscle functions for various organs(breathing difficulties, "
+                                              "impaired balance, etc.) Continue donating money in order to initiate ideas for"
+                                              "assisting ALS patients. ",
+                                          userPair: userPair,
+                                          myAccount: myAccount,
                                         )),
                               );
                             },

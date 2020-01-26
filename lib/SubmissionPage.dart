@@ -17,9 +17,10 @@ class _SubmissionPageState extends State<SubmissionPage> {
   final GlobalKey<FormState> _assistanceFormKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    print("UID Submission: " + widget.uid.toString());
     return Scaffold(
         appBar: AppBar(
-          title: Text("Submit a need"),
+          title: Text("Submit a Need"),
         ),
         body: Column(
           children: <Widget>[
@@ -126,13 +127,13 @@ class _SubmissionPageState extends State<SubmissionPage> {
               onPressed: () {
                 Firestore.instance.collection("applications").document(widget.uid)
                     .setData({
-                  "age": list[0].text,
+                  "age": double.parse(list[0].text),
                   "cause": _myCause,
-                  "cost":list[5].text,
-                  "funds":list[3].text,
-                  "income":list[2].text,
-                  "success chance":list[4].text,
-                  "terminality":list[1].text,
+                  "cost":double.parse(list[5].text),
+                  "funds":double.parse(list[3].text),
+                  "income":double.parse(list[2].text),
+                  "success chance":double.parse(list[4].text),
+                  "terminality":double.parse(list[1].text),
                 });
                 Navigator.pop(context);
               },

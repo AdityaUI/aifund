@@ -7,9 +7,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:codedecoders/DonateLogic.dart';
 
 class Heart extends StatefulWidget {
-  Heart({Key key, this.title}) : super(key: key);
+  Heart({Key key, this.uid}) : super(key: key);
 
-  final String title;
+  final String uid;
 
   @override
   _HeartState createState() => _HeartState();
@@ -23,10 +23,9 @@ class _HeartState extends State<Heart> {
   @override
   void initState() {
     super.initState();
-    FirebaseAuth.instance.currentUser().then((value) {
       Firestore.instance
           .collection("users")
-          .document(value.uid)
+          .document(widget.uid)
           .get()
           .then((given) {
         setState(() {
@@ -39,7 +38,6 @@ class _HeartState extends State<Heart> {
           });
         });
       });
-    });
   }
 
   Future<AccountResponse> loginStellar() async {
@@ -57,6 +55,7 @@ class _HeartState extends State<Heart> {
 
   @override
   Widget build(BuildContext context) {
+    print("heart uid: " + widget.uid.toString());
     return SingleChildScrollView(
       key: new GlobalKey(),
       child: Column(children:[
@@ -156,7 +155,7 @@ class _HeartState extends State<Heart> {
                         children: <Widget>[
                           SizedBox(height: 20,),
                           Text(
-                            snapshot.data.balances[0].balance + " XLM",
+                            "\$${double.parse(snapshot.data.balances[0].balance)/1000}",
                             style: TextStyle(
                                 color: Color(0xff3cabff),
                                 fontSize: 20,
@@ -178,14 +177,6 @@ class _HeartState extends State<Heart> {
                       return CircularProgressIndicator();
                     }
 
-                  },
-                ),
-                SizedBox(height: 20,),
-                FlatButton(
-                  child: Text("Donate"),
-                  onPressed: () {
-                      DonateLogic logic = DonateLogic(myAccount: myAccount);
-                      logic.sendFunds(userPair.secretSeed, "GAZAHISP7VFYSWUKWLUCGMYLWW4VLAPJXP6IVMQYJ235UOXFPSIMJERU", "1000");
                   },
                 ),
                 SizedBox(height: 20,),

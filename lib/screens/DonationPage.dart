@@ -65,11 +65,12 @@ class _DonationState extends State<DonationPage> {
           FlatButton(
             child: Text("Donate"),
             onPressed: () async {
+              //print("SEED:" + widget.userPair.secretSeed.toString());
               if (_amtFormKey.currentState.validate()) {
                 DonateLogic logic = DonateLogic(myAccount: widget.myAccount);
                 print('here');
                 logic.sendFunds(
-                    "SA6Q3BN75KH67LNXIUJWERKDNHRYJQ6UWTSIMRHIMU5VRAADBOVNCYMN",
+                    widget.userPair.secretSeed,
                     DonateAccounts().AccountIds[
                         DonateAccounts().causes.indexOf(widget.cause)],
                     amountInputController.text);
