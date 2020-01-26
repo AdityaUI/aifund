@@ -2,7 +2,7 @@ import 'package:codedecoders/homePage.dart';
 import 'package:flutter/material.dart';
 import 'package:line_awesome_icons/line_awesome_icons.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart'
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -123,14 +123,14 @@ class _LoginState extends State<Login> {
                             password: pwdInputController.text)
                             .then((currentUser) => Firestore.instance
                             .collection("users")
-                            .document(currentUser.uid)
+                            .document(currentUser.user.uid)
                             .get()
                             .then((DocumentSnapshot result) =>
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => HomePage(
-                                      uid: currentUser.uid,
+                                      uid: currentUser.user.uid,
                                     ))))
                             .catchError((err) => print(err)))
                             .catchError((err) => print(err));
