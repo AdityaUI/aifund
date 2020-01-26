@@ -10,15 +10,20 @@ class DonateLogic {
 
   AccountResponse myAccount;
 
-  void sendFunds(String secret, String to) {
+  void sendFunds(String secret, String to, String amt) {
     Network.useTestNetwork();
     Server server = new Server("https://horizon-testnet.stellar.org");
 
+
+    print('here2');
     KeyPair myKp = KeyPair.fromSecretSeed(secret);
     KeyPair toKp = KeyPair.fromAccountId(to);
+    print(secret);
+    print(to);
+    print(amt);
     Transaction transaction = new TransactionBuilder(myAccount)
         .addOperation(new PaymentOperationBuilder(
-        toKp, new AssetTypeNative(), "1000")
+        toKp, new AssetTypeNative(), amt)
         .build())
         .addMemo(Memo.text("Test Transaction"))
         .build();
@@ -33,25 +38,6 @@ class DonateLogic {
   }
 
 
-  void addFunds(String secret) async {
-    KeyPair kp = KeyPair.random();
-    var url = "https://friendbot.stellar.org/?addr=${kp.accountId}";
-    await http.get(url);
 
-    Network.useTestNetwork();
-    Server server = new Server("https://horizon-testnet.stellar.org");
-
-    server.accounts.account(kp).then((account) {
-      Transaction transaction = new TransactionBuilder(account)
-          .addOperation(new PaymentOperationBuilder(
-          KeyPair.fromSecretSeed(secret), new AssetTypeNative(), "1000")
-          .build())
-          .addMemo(Memo.text("Test Transaction"))
-          .build();
-      transaction.sign(kp);
-      server.submitTransaction(transaction);
-    });
-
-  }
 
 }

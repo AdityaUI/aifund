@@ -1,3 +1,4 @@
+import 'package:codedecoders/SubmissionPage.dart';
 import 'package:codedecoders/screens/explore.dart';
 import 'package:codedecoders/screens/heart.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,7 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 //TODO Important Line of Code for implementation of API interface
-//double f = await fetchAPIResult(a.toString());
+//double f = await fetchAPIResult(age.toString(), terminality.toString(), );
 
 
 Future<double> fetchAPIResult(int age, int terminality, int income, int funds, int success, int cost) async {
@@ -53,13 +54,6 @@ class _HomePageState extends State<HomePage> {
 
 
   int _currentIndex = 0;
-  List<Widget> _children = [
-    Heart(),
-    Explore(),
-    Container(),
-    Container(),
-    Container(),
-  ];
 
   void onTabTapped(int index){
     setState(() {
@@ -96,9 +90,14 @@ class _HomePageState extends State<HomePage> {
             icon: Icon(LineAwesomeIcons.search),
             title: Text("Search"),
           ),
+          BottomNavigationBarItem(
+            icon: Icon(LineAwesomeIcons.database),
+            title: Text("Apply for Aid"),
+          ),
         ],
       ),
-      body: _children[_currentIndex],
+      body: _currentIndex == 0 ? Heart() : _currentIndex == 1 ? Explore() : SubmissionPage(uid: widget.uid)
+
     );
   }
 

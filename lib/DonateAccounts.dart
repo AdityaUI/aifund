@@ -12,7 +12,7 @@ class DonateAccounts {
     "Diabetes",
     "Parkinson’s",
     "HIV",
-    "Coronavirus"];
+    "Alzheimer's"];
 
   List<String> AccountIds = [
     "GCXUUKMAWDY2VNS3OAPNIYDFRPSQP76M5WRP56FHDVEFOQKLI62MRNCV",

@@ -19,6 +19,7 @@ class _HeartState extends State<Heart> {
   KeyPair userPair;
   AccountResponse myAccount;
 
+
   @override
   void initState() {
     super.initState();
@@ -184,17 +185,17 @@ class _HeartState extends State<Heart> {
                   child: Text("Donate"),
                   onPressed: () {
                       DonateLogic logic = DonateLogic(myAccount: myAccount);
-                      logic.sendFunds("SA6Q3BN75KH67LNXIUJWERKDNHRYJQ6UWTSIMRHIMU5VRAADBOVNCYMN", "GAZAHISP7VFYSWUKWLUCGMYLWW4VLAPJXP6IVMQYJ235UOXFPSIMJERU");
+                      logic.sendFunds(userPair.secretSeed, "GAZAHISP7VFYSWUKWLUCGMYLWW4VLAPJXP6IVMQYJ235UOXFPSIMJERU", "1000");
                   },
                 ),
                 SizedBox(height: 20,),
-                FlatButton(
-                  child: Text("Add Funds"),
-                  onPressed: () {
-                    DonateLogic logic = DonateLogic(myAccount: myAccount);
-                    logic.addFunds("SA6Q3BN75KH67LNXIUJWERKDNHRYJQ6UWTSIMRHIMU5VRAADBOVNCYMN");
-                  },
-                ),
+//                FlatButton(
+//                  child: Text("Add Funds"),
+//                  onPressed: () {
+//                    DonateLogic logic = DonateLogic(myAccount: myAccount);
+//                    logic.addFunds(userPair.secretSeed);
+//                  },
+//                ),
               ],
             ),],),
     );
