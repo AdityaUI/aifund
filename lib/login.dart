@@ -165,34 +165,6 @@ class _LoginState extends State<Login> {
                   },
                 ),
               ),
-              SizedBox(
-                height: 20,
-              ),
-              MaterialButton(
-                minWidth: 330,
-                height: 70,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    side: BorderSide(color: Color(0xff501396), width: 3)),
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => HomePage()));
-                },
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Text(
-                      "Continue as Guest",
-                      style: TextStyle(
-                          color: Color(0xff501396),
-                          fontFamily: "CentraleSansRegular",
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-              ),
             ],
           ),
         ),
