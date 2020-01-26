@@ -45,18 +45,6 @@ class _HomePageState extends State<HomePage> {
             icon: Icon(LineAwesomeIcons.search),
             title: Text("Search"),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(LineAwesomeIcons.signal),
-            title: Text("Signal"),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(LineAwesomeIcons.bell_o),
-            title: Text("Notification"),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(LineAwesomeIcons.user),
-            title: Text("Profile"),
-          ),
         ],
       ),
       body: _children[_currentIndex],

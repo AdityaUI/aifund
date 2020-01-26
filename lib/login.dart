@@ -80,7 +80,7 @@ class _LoginState extends State<Login> {
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      Color(0xff471a91),
+                      Color(0xFF6A1B9A),
                       Color(0xff3cabff)
                     ],
                   ),

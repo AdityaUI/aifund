@@ -13,7 +13,7 @@ class Heart extends StatelessWidget {
             width: double.infinity,
           ),
           Positioned(
-            top: 60,
+            top: 50,
             left: 30,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -34,7 +34,7 @@ class Heart extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: 540,
+            top: 350,
             width: MediaQuery.of(context).size.width,
             child: Column(
               children: <Widget>[
@@ -46,7 +46,7 @@ class Heart extends StatelessWidget {
                         Text(
                           "\$1,730",
                           style: TextStyle(
-                              color: Color(0xff3cabff),
+                              color: Color(0xFF6A1B9A),
                               fontSize: 35,
                               fontFamily: 'CentraleSansRegular',
                               fontWeight: FontWeight.bold),
@@ -89,7 +89,7 @@ class Heart extends StatelessWidget {
                   height: 80,
                   decoration: BoxDecoration(
                       gradient: LinearGradient(
-                        colors: [Color(0xff471a91), Color(0xff3cabff)],
+                        colors: [Color(0xFF6A1B9A), Color(0xff3cabff)],
                       ),
                       borderRadius: BorderRadius.circular(10)),
                   child: Row(
