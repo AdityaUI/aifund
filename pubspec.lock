@@ -71,6 +71,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.2"
+  eventsource:
+    dependency: transitive
+    description:
+      name: eventsource
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.2"
   firebase:
     dependency: transitive
     description:
@@ -120,6 +127,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.1+2"
+  fixnum:
+    dependency: transitive
+    description:
+      name: fixnum
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.10.11"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -136,12 +150,12 @@ packages:
     source: sdk
     version: "0.0.0"
   http:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: http
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.12.0+4"
+    version: "0.11.3+17"
   http_parser:
     dependency: transitive
     description:
@@ -170,6 +184,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.4+2"
+  logging:
+    dependency: transitive
+    description:
+      name: logging
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.11.4"
   matcher:
     dependency: transitive
     description:
@@ -231,6 +252,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.9.3"
+  stellar:
+    dependency: "direct main"
+    description:
+      name: stellar
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.2"
   stream_channel:
     dependency: transitive
     description:
@@ -245,6 +273,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.5"
+  sync:
+    dependency: transitive
+    description:
+      name: sync
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.0"
   term_glyph:
     dependency: transitive
     description:
@@ -259,6 +294,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.11"
+  tweetnacl:
+    dependency: transitive
+    description:
+      name: tweetnacl
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.2"
   typed_data:
     dependency: transitive
     description:
