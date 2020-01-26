@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:line_awesome_icons/line_awesome_icons.dart';
 
 class HomePage extends StatefulWidget {
+  HomePage({Key key, this.uid}) : super(key: key);
+  final String uid;
   @override
   _HomePageState createState() => _HomePageState();
 }
